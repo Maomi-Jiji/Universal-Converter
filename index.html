@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Converter / 単位換算（たんいかんさん）</title>
+    <style>
+        :root { 
+            --us-color: #6db38a; 
+            --jp-color: #8fce9b; 
+            --glass-bg: rgba(255, 255, 255, 0.75); 
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --text-main: #4a5d4e; 
+        }
+
+        body { 
+            font-family: 'UD Digital Kyokasho-tai', 'UD デジタル 教科書体 N-R', 'BIZ UDPGothic', 'BIZ UDGothic', "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; 
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            background-color: #e6f4ca; 
+            background-image: url('image_0.png'); 
+            background-blend-mode: multiply; 
+            background-repeat: repeat; 
+            background-size: 400px; 
+            background-attachment: fixed; 
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            font-size: 1.8rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            margin-right: 15px;
+            padding: 0 10px;
+            transition: color 0.3s;
+        }
+        .menu-btn:hover { color: #8fce9b; }
+        .header-title { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; margin: 0; color: #5c7361; }
+
+        #overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.15); z-index: 150;
+        }
+        #overlay.active { display: block; }
+
+        #sidebar {
+            position: fixed; top: 0; left: -350px; width: 300px; height: 100%;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1); transition: left 0.3s ease; z-index: 200;
+            padding: 30px; box-sizing: border-box; overflow-y: auto;
+        }
+        #sidebar.active { left: 0; }
+        .close-btn { font-size: 1.5rem; cursor: pointer; text-align: right; color: #888; margin-bottom: 15px; }
+        .desc-en { color: #666; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; border-bottom: 1px dashed #ccc; padding-bottom: 20px; }
+        .desc-jp { color: #555; font-size: 0.95rem; line-height: 1.8; }
+
+        .container { max-width: 1050px; margin: 30px auto; padding: 0 20px; padding-bottom: 60px; }
+
+        .tabs {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 20px; border: none; border-radius: 25px; background: var(--glass-bg);
+            backdrop-filter: blur(5px); font-size: 0.95rem; font-weight: bold; color: #7b9482;
+            cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.95); transform: translateY(-2px); }
+        .tab-btn.active { background: #fff; color: #4a5d4e; box-shadow: 0 4px 12px rgba(109, 179, 138, 0.2); }
+
+        .tab-content { display: none; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .tab-content.active { display: grid; animation: fadeIn 0.4s ease; }
+        .tab-global-single { grid-template-columns: 1fr !important; max-width: 800px; margin: 0 auto; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .col-header { text-align: center; margin-bottom: 20px; }
+        .us-title { color: var(--us-color); font-size: 2.2rem; margin: 0; text-shadow: 1px 1px 2px rgba(255,255,255,0.7); }
+        .jp-title { color: var(--jp-color); font-size: 2.2rem; margin: 0; text-shadow: 1px 1px 2px rgba(255,255,255,0.7); }
+
+        .label { font-size: 0.85rem; color: #698270; font-weight: bold; margin-bottom: 5px; padding-left: 5px; }
+        .label-center { text-align: center; font-size: 1rem; margin-top: 15px; } 
+        
+        .row { 
+            background: var(--glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 15px; margin-bottom: 15px; border-radius: 15px; border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: space-between; 
+            min-height: 50px;
+        }
+        .row-center { justify-content: center; gap: 8px; flex-wrap: wrap; }
+        
+        .input-group { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; white-space: nowrap;}
+        
+        input { 
+            width: 85px; padding: 10px; border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; 
+            font-size: 1.1rem; text-align: right; color: var(--text-main); background: rgba(255, 255, 255, 0.9);
+            font-family: inherit; 
+        }
+        input.short-input { width: 55px; font-size: 1rem; color: #698270; }
+        input.currency-input { width: 145px; } 
+
+        input:focus { outline: none; border-color: var(--us-color); box-shadow: 0 0 0 3px rgba(109, 179, 138, 0.2); }
+        input[readonly] { background: transparent; border: none; font-weight: bold; color: #5c7361; box-shadow: none; padding-right: 0;}
+        
+        select {
+            padding: 10px 5px; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9); color: var(--text-main); font-family: inherit;
+            font-size: 0.85rem; outline: none; cursor: pointer; font-weight: bold; width: auto; 
+            max-width: 140px; 
+        }
+        select:focus { border-color: var(--us-color); box-shadow: 0 0 0 3px rgba(109, 179, 138, 0.2); }
+
+        .unit { font-weight: bold; color: #8fa696; font-size: 0.9rem; margin-left: 2px; }
+        .arrow { font-size: 1.4rem; color: #8fce9b; padding: 0 5px; font-weight: bold; } 
+
+        .copy-btn {
+            background: none; border: none; font-size: 1.2rem; cursor: pointer;
+            color: #6db38a; padding: 0 2px; margin-left: 2px; transition: transform 0.2s;
+            outline: none;
+        }
+        .copy-btn:hover { transform: scale(1.15); }
+        .copy-btn:active { transform: scale(0.9); }
+
+        .swap-btn {
+            background: #fff; border: 1px solid var(--glass-border); border-radius: 50%;
+            width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer; color: #6db38a; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease; margin: 0 5px; outline: none; font-weight: bold;
+        }
+        .swap-btn:hover { background: #e6f4ca; transform: rotate(180deg); }
+
+        #toast {
+            visibility: hidden; min-width: 200px; background-color: rgba(74, 93, 78, 0.9);
+            color: #fff; text-align: center; border-radius: 25px; padding: 12px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 0.95rem; font-weight: bold; opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        ruby rt { font-size: 0.6em; color: #8fa696; } 
+
+        .rate-info { font-size: 0.8rem; color: #8fa696; text-align: center; margin-top: -5px; }
+
+        /* スマホ向けの微調整（はみ出し防止） */
+        @media (max-width: 850px) { 
+            .tab-content.active { grid-template-columns: 1fr; }
+            #sidebar { width: 280px; }
+            .row-center .swap-btn { transform: rotate(90deg); margin: 5px auto; } 
+            .swap-btn:hover { transform: rotate(270deg); }
+            
+            /* スマホの小さな画面でも見切れないように、枠と文字のサイズをスリム化 */
+            .container { padding: 0 10px; padding-bottom: 60px; }
+            input.currency-input { width: 110px; padding: 10px 5px; }
+            select { max-width: 120px; font-size: 0.8rem; padding: 8px 2px; }
+            .copy-btn { font-size: 1.1rem; }
+            .input-group { gap: 2px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="menu-btn" onclick="toggleSidebar()">≡</button>
+    <h1 class="header-title">Universal Converter</h1>
+</header>
+
+<div id="overlay" onclick="toggleSidebar()"></div>
+
+<div id="sidebar">
+    <div class="close-btn" onclick="toggleSidebar()">✕</div>
+    <div class="desc-en">
+        <strong>About this app</strong><br><br>
+        Easily convert between units and currencies. Enter a number to calculate instantly.
+<br>
+<br>📋：Copy　
+<br>⇄：Swap 
+    </div>
+    <div class="desc-jp">
+        <strong>この<ruby>アプリ<rt>あぷり</rt></ruby>について</strong><br><br>
+        <ruby>単位<rt>たんい</rt></ruby>や<ruby>通貨<rt>つうか</rt></ruby>を<ruby>簡単<rt>かんたん</rt></ruby>に<ruby>変換<rt>へんかん</rt></ruby>できます。<ruby>数字<rt>すうじ</rt></ruby>を<ruby>入力<rt>にゅうりょく</rt></ruby>すると、すぐに<ruby>結果<rt>けっか</rt></ruby>が<ruby>出<rt>で</rt></ruby>ます。<ruby>上<rt>うえ</rt></ruby>の<ruby>タブ<rt>たぶ</rt></ruby>から<ruby>カテゴリー<rt>かてごりー</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。
+<br>
+<br>📋：コピー
+<br>⇄：入れ替える
+    </div>
+</div>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'tab-length')">Length & Speed / <ruby>長<rt>なが</rt></ruby>さ・<ruby>速度<rt>そくど</rt></ruby></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-weight')">Weight & Vol / <ruby>重<rt>おも</rt></ruby>さ・<ruby>容量<rt>ようりょう</rt></ruby></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-global')">Global / <ruby>世界<rt>せかい</rt></ruby></button>
+    </div>
+
+    <div id="tab-length" class="tab-content active">
+        <div id="us-side-length">
+            <div class="col-header"><h2 class="us-title">US</h2></div>
+            <div class="label">Height / <ruby>身長<rt>しんちょう</rt></ruby> (ft+in → cm)</div>
+            <div class="row">
+                <div class="input-group">
+                    <input type="text" inputmode="decimal" id="us_ft" class="short-input" oninput="usToJpHeight()"> <span class="unit">ft</span>
+                    <input type="text" inputmode="decimal" id="us_in" class="short-input" oninput="usToJpHeight()"> <span class="unit">in</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_cm_res" readonly> <span class="unit">cm</span>
+                    <button class="copy-btn" onclick="copyValue('jp_cm_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            
+            <div class="label">Distance / <ruby>距離<rt>きょり</rt></ruby> (mile → km)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_mi" oninput="calc('mi_to_km')"> <span class="unit">mi</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_km_res_mi" readonly> <span class="unit">km</span>
+                    <button class="copy-btn" onclick="copyValue('jp_km_res_mi')" title="コピー">📋</button>
+                </div>
+            </div>
+
+            <div class="label">Speed / <ruby>速度<rt>そくど</rt></ruby> (mph → km/h)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_mph" oninput="calc('mph_to_kmh')"> <span class="unit">mph</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_kmh_res" readonly> <span class="unit">km/h</span>
+                    <button class="copy-btn" onclick="copyValue('jp_kmh_res')" title="コピー">📋</button>
+                </div>
+            </div>
+
+            <div class="label">Area / <ruby>面積<rt>めんせき</rt></ruby> (sq ft → ㎡ & <ruby>畳<rt>じょう</rt></ruby>)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_sqft" oninput="calc('sqft_to_m2')"> <span class="unit" style="width:30px;">sqft</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_m2_res" class="short-input" readonly> <span class="unit">㎡</span><span style="color:#c4d6cb; margin: 0 2px;">/</span>
+                    <input type="text" id="jp_jo_res" class="short-input" readonly> <span class="unit"><ruby>畳<rt>じょう</rt></ruby></span>
+                    <button class="copy-btn" onclick="copyArea('jp_m2_res', 'jp_jo_res')" title="コピー">📋</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="jp-side-length">
+            <div class="col-header"><h2 class="jp-title">JP</h2></div>
+            <div class="label">Height / <ruby>身長<rt>しんちょう</rt></ruby> (cm → ft+in)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_cm" oninput="jpToUsHeight()"> <span class="unit">cm</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_ft_res" class="short-input" readonly> <span class="unit">ft</span>
+                    <input type="text" id="us_in_res" class="short-input" readonly> <span class="unit">in</span>
+                    <button class="copy-btn" onclick="copyHeightUS('us_ft_res', 'us_in_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            
+            <div class="label">Distance / <ruby>距離<rt>きょり</rt></ruby> (km → mile)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_km" oninput="calc('km_to_mi')"> <span class="unit">km</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_mi_res" readonly> <span class="unit">mi</span>
+                    <button class="copy-btn" onclick="copyValue('us_mi_res')" title="コピー">📋</button>
+                </div>
+            </div>
+
+            <div class="label">Speed / <ruby>速度<rt>そくど</rt></ruby> (km/h → mph)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_kmh" oninput="calc('kmh_to_mph')"> <span class="unit">km/h</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_mph_res" readonly> <span class="unit">mph</span>
+                    <button class="copy-btn" onclick="copyValue('us_mph_res')" title="コピー">📋</button>
+                </div>
+            </div>
+
+            <div class="label">Area / <ruby>面積<rt>めんせき</rt></ruby> (㎡ & <ruby>畳<rt>じょう</rt></ruby> → sq ft)</div>
+            <div class="row">
+                <div class="input-group">
+                    <input type="text" inputmode="decimal" id="jp_m2" class="short-input" oninput="calcAreaJP('m2')"> <span class="unit">㎡</span>
+                    <span style="color:#c4d6cb; margin: 0 2px;">/</span>
+                    <input type="text" inputmode="decimal" id="jp_jo" class="short-input" oninput="calcAreaJP('jo')"> <span class="unit"><ruby>畳<rt>じょう</rt></ruby></span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_sqft_res" readonly> <span class="unit">sqft</span>
+                    <button class="copy-btn" onclick="copyValue('us_sqft_res')" title="コピー">📋</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-weight" class="tab-content">
+        <div id="us-side-weight">
+            <div class="col-header"><h2 class="us-title">US</h2></div>
+            <div class="label">Weight / <ruby>重<rt>おも</rt></ruby>さ (lb → kg)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_lb" oninput="calc('lb_to_kg')"> <span class="unit">lb</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_kg_res" readonly> <span class="unit">kg</span>
+                    <button class="copy-btn" onclick="copyValue('jp_kg_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            <div class="label">Small Wt / <ruby>小<rt>ちい</rt></ruby>さな<ruby>重<rt>おも</rt></ruby>さ (oz → g)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_oz" oninput="calc('oz_to_g')"> <span class="unit">oz</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_g_res" readonly> <span class="unit">g</span>
+                    <button class="copy-btn" onclick="copyValue('jp_g_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            <div class="label">Volume / <ruby>容量<rt>ようりょう</rt></ruby> (fl oz → ml)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_floz" oninput="calc('floz_to_ml')"> <span class="unit">floz</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_ml_res" readonly> <span class="unit">ml</span>
+                    <button class="copy-btn" onclick="copyValue('jp_ml_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            <div class="label">Cooking / <ruby>料理<rt>りょうり</rt></ruby> (US Cup → ml)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_cup" oninput="calc('uscup_to_ml')"> <span class="unit">Cup</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="jp_ml_cup_res" readonly> <span class="unit">ml</span>
+                    <button class="copy-btn" onclick="copyValue('jp_ml_cup_res')" title="コピー">📋</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="jp-side-weight">
+            <div class="col-header"><h2 class="jp-title">JP</h2></div>
+            <div class="label">Weight / <ruby>重<rt>おも</rt></ruby>さ (kg → lb)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_kg" oninput="calc('kg_to_lb')"> <span class="unit">kg</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_lb_res" readonly> <span class="unit">lb</span>
+                    <button class="copy-btn" onclick="copyValue('us_lb_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            <div class="label">Small Wt / <ruby>小<rt>ちい</rt></ruby>さな<ruby>重<rt>おも</rt></ruby>さ (g → oz)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_g" oninput="calc('g_to_oz')"> <span class="unit">g</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_oz_res" readonly> <span class="unit">oz</span>
+                    <button class="copy-btn" onclick="copyValue('us_oz_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            <div class="label">Volume / <ruby>容量<rt>ようりょう</rt></ruby> (ml → fl oz)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_ml" oninput="calc('ml_to_floz')"> <span class="unit">ml</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_floz_res" readonly> <span class="unit">floz</span>
+                    <button class="copy-btn" onclick="copyValue('us_floz_res')" title="コピー">📋</button>
+                </div>
+            </div>
+            <div class="label">Cooking / <ruby>料理<rt>りょうり</rt></ruby> (ml → US Cup)</div>
+            <div class="row">
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_ml_cup" oninput="calc('ml_to_uscup')"> <span class="unit">ml</span></div>
+                <div class="arrow">→</div>
+                <div class="input-group">
+                    <input type="text" id="us_cup_res" readonly> <span class="unit">Cup</span>
+                    <button class="copy-btn" onclick="copyValue('us_cup_res')" title="コピー">📋</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-global" class="tab-content tab-global-single">
+        <div class="col-header" style="margin-bottom: 5px;">
+            <div class="rate-info" id="offline_msg"></div>
+        </div>
+        
+        <div class="label label-center">Currency / <ruby>通貨<rt>つうか</rt></ruby></div>
+        <div class="row row-center">
+            <div class="input-group">
+                <input type="text" inputmode="decimal" id="curr_input_1" class="currency-input" oninput="calcGlobalCurrency('1_to_2')"> 
+                <select id="curr_select_1" onchange="calcGlobalCurrency('1_to_2')">
+                    <option value="JPY">JPY (日本円・にほんえん)</option>
+                    <option value="USD" selected>USD (米ドル・べいどる)</option>
+                    <option value="EUR">EUR (ユーロ・ゆーろ)</option>
+                    <option value="CNY">CNY (人民元・じんみんげん)</option>
+                    <option value="KRW">KRW (ウォン・うぉん)</option>
+                    <option value="GBP">GBP (ポンド・ぽんど)</option>
+                    <option value="AUD">AUD (豪ドル・ごうどる)</option>
+                </select>
+            </div>
+            <button class="swap-btn" onclick="swapGlobal('curr')" title="Swap 入れ替える">⇄</button>
+            <div class="input-group">
+                <input type="text" inputmode="decimal" id="curr_input_2" class="currency-input" oninput="calcGlobalCurrency('2_to_1')"> 
+                <select id="curr_select_2" onchange="calcGlobalCurrency('2_to_1')">
+                    <option value="JPY" selected>🇯🇵 JPY (日本円・にほんえん)</option>
+                    <option value="USD">USD (米ドル・べいどる)</option>
+                    <option value="EUR">EUR (ユーロ・ゆーろ)</option>
+                    <option value="CNY">CNY (人民元・じんみんげん)</option>
+                    <option value="KRW">KRW (ウォン・うぉん)</option>
+                    <option value="GBP">GBP (ポンド・ぽんど)</option>
+                    <option value="AUD">AUD (豪ドル・ごうどる)</option>
+                </select>
+                <button class="copy-btn" onclick="copyValue('curr_input_2')" title="Copy コピー">📋</button>
+            </div>
+        </div>
+        
+        <div class="label label-center">Shoes / <ruby>靴<rt>くつ</rt></ruby>の<ruby>サイズ<rt>さいず</rt></ruby></div>
+        <div class="row row-center">
+            <div class="input-group">
+                <input type="text" inputmode="decimal" id="shoe_input_1" oninput="calcGlobalShoe('1_to_2')"> 
+                <select id="shoe_select_1" onchange="calcGlobalShoe('1_to_2')">
+                    <option value="US" selected>US (アメリカ・あめりか)</option>
+                    <option value="UK">UK (イギリス・いぎりす)</option>
+                    <option value="EU">EU (ヨーロッパ・よーろっぱ)</option>
+                    <option value="JP">JP (cm・センチ・せんち)</option>
+                </select>
+            </div>
+            <button class="swap-btn" onclick="swapGlobal('shoe')" title="Swap 入れ替える">⇄</button>
+            <div class="input-group">
+                <input type="text" inputmode="decimal" id="shoe_input_2" oninput="calcGlobalShoe('2_to_1')"> 
+                <select id="shoe_select_2" onchange="calcGlobalShoe('2_to_1')">
+                    <option value="US">US (アメリカ・あめりか)</option>
+                    <option value="UK">UK (イギリス・いぎりす)</option>
+                    <option value="EU">EU (ヨーロッパ・よーろっぱ)</option>
+                    <option value="JP" selected>JP (cm・センチ・せんち)</option>
+                </select>
+                <button class="copy-btn" onclick="copyValue('shoe_input_2')" title="copy コピー">📋</button>
+            </div>
+        </div>
+
+        <div class="label label-center">Temperature / <ruby>温度<rt>おんど</rt></ruby></div>
+        <div class="row row-center">
+            <div class="input-group">
+                <input type="text" inputmode="decimal" id="temp_input_1" oninput="calcGlobalTemp('1_to_2')"> 
+                <select id="temp_select_1" onchange="calcGlobalTemp('1_to_2')">
+                    <option value="F" selected>°F (華氏・かし)</option>
+                    <option value="C">°C (摂氏・せっし)</option>
+                </select>
+            </div>
+            <button class="swap-btn" onclick="swapGlobal('temp')" title="入れ替える">⇄</button>
+            <div class="input-group">
+                <input type="text" inputmode="decimal" id="temp_input_2" oninput="calcGlobalTemp('2_to_1')"> 
+                <select id="temp_select_2" onchange="calcGlobalTemp('2_to_1')">
+                    <option value="F">°F (華氏・かし)</option>
+                    <option value="C" selected>°C (摂氏・せっし)</option>
+                </select>
+                <button class="copy-btn" onclick="copyValue('temp_input_2')" title="コピー">📋</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast"><ruby>文字<rt>もじ</rt></ruby>をコピーしました！</div>
+
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+function openTab(evt, tabName) {
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+    }
+    const tabBtns = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < tabBtns.length; i++) {
+        tabBtns[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const inputs = Array.from(document.querySelectorAll('input:not([readonly])'));
+        const visibleInputs = inputs.filter(input => input.offsetParent !== null);
+        const index = visibleInputs.indexOf(document.activeElement);
+        if (index > -1 && index < visibleInputs.length - 1) {
+            visibleInputs[index + 1].focus();
+        }
+    }
+});
+
+// --- コピー機能 ---
+function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function copyValue(id) {
+    const val = document.getElementById(id).value;
+    if(!val) return;
+    navigator.clipboard.writeText(val).then(showToast);
+}
+
+function copyArea(id1, id2) {
+    const v1 = document.getElementById(id1).value;
+    const v2 = document.getElementById(id2).value;
+    if(v1 && v2) navigator.clipboard.writeText(`${v1} ㎡ / ${v2} 畳`).then(showToast);
+}
+function copyHeightUS(id1, id2) {
+    const v1 = document.getElementById(id1).value;
+    const v2 = document.getElementById(id2).value;
+    if(v1 && v2) navigator.clipboard.writeText(`${v1} ft ${v2} in`).then(showToast);
+}
+
+// --- カンマ区切り（千位表示）対応の入出力システム ---
+const getV = (id) => {
+    let valStr = document.getElementById(id).value;
+    if (!valStr) return NaN;
+    valStr = valStr.replace(/,/g, '');
+    return parseFloat(valStr);
+};
+
+const setV = (id, val, dec=2) => {
+    const el = document.getElementById(id);
+    if (isNaN(val) || val === '') {
+        el.value = "";
+    } else {
+        el.value = val.toLocaleString('en-US', {
+            minimumFractionDigits: dec, maximumFractionDigits: dec
+        });
+    }
+};
+
+document.querySelectorAll('input:not([readonly])').forEach(inp => {
+    inp.addEventListener('blur', function() {
+        if(this.value) {
+            const num = parseFloat(this.value.replace(/,/g, ''));
+            if(!isNaN(num)) {
+                this.value = num.toLocaleString('en-US', { maximumFractionDigits: 4 });
+            }
+        }
+    });
+});
+
+let apiRates = {}; 
+
+async function getRate() {
+    try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        const data = await res.json();
+        apiRates = data.rates;
+        
+        localStorage.setItem('exchangeRates', JSON.stringify(apiRates));
+        const now = new Date();
+        localStorage.setItem('rateDate', `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`);
+        document.getElementById('offline_msg').innerText = ""; 
+        
+        calcGlobalCurrency('1_to_2');
+    } catch(e) { 
+        const cachedRates = localStorage.getItem('exchangeRates');
+        const cachedDate = localStorage.getItem('rateDate');
+        if (cachedRates) {
+            apiRates = JSON.parse(cachedRates);
+            document.getElementById('offline_msg').innerHTML = `<ruby>通信<rt>つうしん</rt></ruby>が<ruby>切<rt>き</rt></ruby>れています（<ruby>過去<rt>かこ</rt></ruby>の<ruby>記録<rt>きろく</rt></ruby>で<ruby>計算<rt>けいさん</rt></ruby>します）`;
+            calcGlobalCurrency('1_to_2');
+        }
+    }
+}
+
+function swapGlobal(type) {
+    const sel1 = document.getElementById(type + '_select_1');
+    const sel2 = document.getElementById(type + '_select_2');
+    const inp1 = document.getElementById(type + '_input_1');
+    const inp2 = document.getElementById(type + '_input_2');
+
+    const tempSel = sel1.value;
+    sel1.value = sel2.value;
+    sel2.value = tempSel;
+
+    const tempInp = inp1.value;
+    inp1.value = inp2.value;
+    inp2.value = tempInp;
+
+    if (type === 'curr') calcGlobalCurrency('1_to_2');
+    if (type === 'shoe') calcGlobalShoe('1_to_2');
+    if (type === 'temp') calcGlobalTemp('1_to_2');
+}
+
+function calcGlobalCurrency(direction) {
+    if(!apiRates.JPY) return; 
+    const unit1 = document.getElementById('curr_select_1').value;
+    const unit2 = document.getElementById('curr_select_2').value;
+    const rate_1_to_2 = apiRates[unit2] / apiRates[unit1];
+    
+    if (direction === '1_to_2') {
+        const val = getV('curr_input_1');
+        const dec = (unit2 === 'JPY' || unit2 === 'KRW') ? 0 : 2; 
+        setV('curr_input_2', val * rate_1_to_2, dec);
+    } else {
+        const val = getV('curr_input_2');
+        const rate_2_to_1 = apiRates[unit1] / apiRates[unit2];
+        const dec = (unit1 === 'JPY' || unit1 === 'KRW') ? 0 : 2;
+        setV('curr_input_1', val * rate_2_to_1, dec);
+    }
+}
+
+function convertShoeToJP(size, unit) {
+    if(unit === 'JP') return size;
+    if(unit === 'US') return size + 18;
+    if(unit === 'UK') return size + 18.5;
+    if(unit === 'EU') return size - 15;
+    return 0;
+}
+function convertShoeFromJP(jpSize, unit) {
+    if(unit === 'JP') return jpSize;
+    if(unit === 'US') return jpSize - 18;
+    if(unit === 'UK') return jpSize - 18.5;
+    if(unit === 'EU') return jpSize + 15;
+    return 0;
+}
+function calcGlobalShoe(direction) {
+    const unit1 = document.getElementById('shoe_select_1').value;
+    const unit2 = document.getElementById('shoe_select_2').value;
+
+    if (direction === '1_to_2') {
+        const val = getV('shoe_input_1');
+        const jpSize = convertShoeToJP(val, unit1);
+        setV('shoe_input_2', convertShoeFromJP(jpSize, unit2), 1);
+    } else {
+        const val = getV('shoe_input_2');
+        const jpSize = convertShoeToJP(val, unit2);
+        setV('shoe_input_1', convertShoeFromJP(jpSize, unit1), 1);
+    }
+}
+
+function calcGlobalTemp(direction) {
+    const unit1 = document.getElementById('temp_select_1').value;
+    const unit2 = document.getElementById('temp_select_2').value;
+
+    if (direction === '1_to_2') {
+        const val = getV('temp_input_1');
+        if (unit1 === unit2) setV('temp_input_2', val, 1);
+        else if (unit1 === 'F' && unit2 === 'C') setV('temp_input_2', (val - 32) / 1.8, 1);
+        else if (unit1 === 'C' && unit2 === 'F') setV('temp_input_2', (val * 1.8) + 32, 1);
+    } else {
+        const val = getV('temp_input_2');
+        if (unit1 === unit2) setV('temp_input_1', val, 1);
+        else if (unit2 === 'F' && unit1 === 'C') setV('temp_input_1', (val - 32) / 1.8, 1);
+        else if (unit2 === 'C' && unit1 === 'F') setV('temp_input_1', (val * 1.8) + 32, 1);
+    }
+}
+
+// --- JP側：㎡ と 畳 の双方向計算 ---
+function calcAreaJP(source) {
+    if (source === 'm2') {
+        const m2 = getV('jp_m2');
+        if (isNaN(m2)) {
+            setV('jp_jo', "");
+            setV('us_sqft_res', "");
+        } else {
+            setV('jp_jo', m2 / 1.62, 1);
+            setV('us_sqft_res', m2 / 0.092903, 2);
+        }
+    } else {
+        const jo = getV('jp_jo');
+        if (isNaN(jo)) {
+            setV('jp_m2', "");
+            setV('us_sqft_res', "");
+        } else {
+            const m2 = jo * 1.62;
+            setV('jp_m2', m2, 2);
+            setV('us_sqft_res', m2 / 0.092903, 2);
+        }
+    }
+}
+
+function calc(mode) {
+    if(mode === 'mi_to_km') setV('jp_km_res_mi', getV('us_mi') * 1.60934);
+    if(mode === 'km_to_mi') setV('us_mi_res', getV('jp_km') / 1.60934);
+    if(mode === 'mph_to_kmh') setV('jp_kmh_res', getV('us_mph') * 1.60934, 1);
+    if(mode === 'kmh_to_mph') setV('us_mph_res', getV('jp_kmh') / 1.60934, 1);
+    if(mode === 'sqft_to_m2') {
+        const m2 = getV('us_sqft') * 0.092903;
+        setV('jp_m2_res', m2, 2);
+        setV('jp_jo_res', m2 / 1.62, 1); 
+    }
+    if(mode === 'm2_to_sqft') setV('us_sqft_res', getV('jp_m2') / 0.092903, 2);
+    if(mode === 'lb_to_kg') setV('jp_kg_res', getV('us_lb') * 0.453592, 2);
+    if(mode === 'kg_to_lb') setV('us_lb_res', getV('jp_kg') / 0.453592, 2);
+    if(mode === 'oz_to_g') setV('jp_g_res', getV('us_oz') * 28.3495, 1);
+    if(mode === 'g_to_oz') setV('us_oz_res', getV('jp_g') / 28.3495, 2);
+    if(mode === 'floz_to_ml') setV('jp_ml_res', getV('us_floz') * 29.5735, 0);
+    if(mode === 'ml_to_floz') setV('us_floz_res', getV('jp_ml') / 29.5735, 1);
+    if(mode === 'uscup_to_ml') setV('jp_ml_cup_res', getV('us_cup') * 236.588, 0);
+    if(mode === 'ml_to_uscup') setV('us_cup_res', getV('jp_ml_cup') / 236.588, 2);
+}
+
+function usToJpHeight() {
+    const ftInput = document.getElementById('us_ft').value;
+    const inInput = document.getElementById('us_in').value;
+    if (ftInput === "" && inInput === "") {
+        document.getElementById('jp_cm_res').value = "";
+        return;
+    }
+    const ft = getV('us_ft') || 0;
+    const inch = getV('us_in') || 0;
+    setV('jp_cm_res', (ft * 30.48) + (inch * 2.54), 1);
+}
+
+function jpToUsHeight() {
+    const cmInput = document.getElementById('jp_cm').value;
+    if (cmInput === "") {
+        document.getElementById('us_ft_res').value = "";
+        document.getElementById('us_in_res').value = "";
+        return;
+    }
+    const cm = getV('jp_cm') || 0;
+    const totalIn = cm / 2.54;
+    setV('us_ft_res', Math.floor(totalIn / 12), 0);
+    setV('us_in_res', totalIn % 12, 1);
+}
+
+getRate();
+</script>
+</body>
+</html>
