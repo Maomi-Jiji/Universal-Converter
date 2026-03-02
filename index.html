@@ -188,7 +188,7 @@
         <strong>About this app</strong><br><br>
         Easily convert between units and currencies. Enter a number to calculate instantly.
 <br>
-<br>📋：Copy　
+<br>📋：Copy 
 <br>⇄：Swap 
     </div>
     <div class="desc-jp">
@@ -409,7 +409,7 @@
             <div class="input-group">
                 <input type="text" inputmode="decimal" id="curr_input_2" class="currency-input" oninput="calcGlobalCurrency('2_to_1')"> 
                 <select id="curr_select_2" onchange="calcGlobalCurrency('2_to_1')">
-                    <option value="JPY" selected>🇯🇵 JPY (日本円・にほんえん)</option>
+                    <option value="JPY" selected>JPY (日本円・にほんえん)</option>
                     <option value="USD">USD (米ドル・べいどる)</option>
                     <option value="EUR">EUR (ユーロ・ゆーろ)</option>
                     <option value="CNY">CNY (人民元・じんみんげん)</option>
@@ -426,7 +426,8 @@
             <div class="input-group">
                 <input type="text" inputmode="decimal" id="shoe_input_1" oninput="calcGlobalShoe('1_to_2')"> 
                 <select id="shoe_select_1" onchange="calcGlobalShoe('1_to_2')">
-                    <option value="US" selected>US (アメリカ・あめりか)</option>
+                    <option value="US_M" selected>US (メンズ・めんず・男性用・だんせいよう)</option>
+                    <option value="US_W">US (レディース・れでぃーす・女性用・じょせいよう)</option>
                     <option value="UK">UK (イギリス・いぎりす)</option>
                     <option value="EU">EU (ヨーロッパ・よーろっぱ)</option>
                     <option value="JP">JP (cm・センチ・せんち)</option>
@@ -436,7 +437,8 @@
             <div class="input-group">
                 <input type="text" inputmode="decimal" id="shoe_input_2" oninput="calcGlobalShoe('2_to_1')"> 
                 <select id="shoe_select_2" onchange="calcGlobalShoe('2_to_1')">
-                    <option value="US">US (アメリカ・あめりか)</option>
+                    <option value="US_M">US (メンズ・めんず・男性用・だんせいよう)</option>
+                    <option value="US_W">US (レディース・れでぃーす・女性用・じょせいよう)</option>
                     <option value="UK">UK (イギリス・いぎりす)</option>
                     <option value="EU">EU (ヨーロッパ・よーろっぱ)</option>
                     <option value="JP" selected>JP (cm・センチ・せんち)</option>
@@ -445,7 +447,7 @@
             </div>
         </div>
 
-        <div class="label label-center">Temperature / <ruby>温度<rt>おんど</rt></ruby></div>
+        <div class="label label-center">Temperature / <ruby>気温<rt>きおん</rt></ruby></div>
         <div class="row row-center">
             <div class="input-group">
                 <input type="text" inputmode="decimal" id="temp_input_1" oninput="calcGlobalTemp('1_to_2')"> 
@@ -467,7 +469,7 @@
     </div>
 </div>
 
-<div id="toast"><ruby>文字<rt>もじ</rt></ruby>をコピーしました！</div>
+<div id="toast">コピーしました！</div>
 
 <script>
 function toggleSidebar() {
@@ -501,7 +503,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// --- コピー機能 ---
 function showToast() {
     const toast = document.getElementById('toast');
     toast.classList.add('show');
@@ -525,7 +526,6 @@ function copyHeightUS(id1, id2) {
     if(v1 && v2) navigator.clipboard.writeText(`${v1} ft ${v2} in`).then(showToast);
 }
 
-// --- カンマ区切り（千位表示）対応の入出力システム ---
 const getV = (id) => {
     let valStr = document.getElementById(id).value;
     if (!valStr) return NaN;
@@ -617,20 +617,24 @@ function calcGlobalCurrency(direction) {
     }
 }
 
+// 👟 靴のサイズ計算ロジックを更新しました
 function convertShoeToJP(size, unit) {
     if(unit === 'JP') return size;
-    if(unit === 'US') return size + 18;
+    if(unit === 'US_M') return size + 18; // メンズは+18
+    if(unit === 'US_W') return size + 17; // レディースは+17
     if(unit === 'UK') return size + 18.5;
     if(unit === 'EU') return size - 15;
     return 0;
 }
 function convertShoeFromJP(jpSize, unit) {
     if(unit === 'JP') return jpSize;
-    if(unit === 'US') return jpSize - 18;
+    if(unit === 'US_M') return jpSize - 18; // メンズ
+    if(unit === 'US_W') return jpSize - 17; // レディース
     if(unit === 'UK') return jpSize - 18.5;
     if(unit === 'EU') return jpSize + 15;
     return 0;
 }
+
 function calcGlobalShoe(direction) {
     const unit1 = document.getElementById('shoe_select_1').value;
     const unit2 = document.getElementById('shoe_select_2').value;
@@ -663,7 +667,6 @@ function calcGlobalTemp(direction) {
     }
 }
 
-// --- JP側：㎡ と 畳 の双方向計算 ---
 function calcAreaJP(source) {
     if (source === 'm2') {
         const m2 = getV('jp_m2');
