@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0054)file:///D:/My_Library/R/M/HTML%20Unit%20Converter.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Converter / 単位換算（たんいかんさん）</title>
     <style>
@@ -202,9 +202,9 @@
 
 <div class="container">
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'tab-length')">Length & Speed / <ruby>長<rt>なが</rt></ruby>さ・<ruby>速度<rt>そくど</rt></ruby></button>
-        <button class="tab-btn" onclick="openTab(event, 'tab-weight')">Weight & Vol / <ruby>重<rt>おも</rt></ruby>さ・<ruby>容量<rt>ようりょう</rt></ruby></button>
-        <button class="tab-btn" onclick="openTab(event, 'tab-global')">Global / <ruby>世界<rt>せかい</rt></ruby></button>
+        <button class="tab-btn active" onclick="openTab(event, &#39;tab-length&#39;)">Length &amp; Speed / <ruby>長<rt>なが</rt></ruby>さ・<ruby>速度<rt>そくど</rt></ruby></button>
+        <button class="tab-btn" onclick="openTab(event, &#39;tab-weight&#39;)">Weight &amp; Vol / <ruby>重<rt>おも</rt></ruby>さ・<ruby>容量<rt>ようりょう</rt></ruby></button>
+        <button class="tab-btn" onclick="openTab(event, &#39;tab-global&#39;)">Global / <ruby>世界<rt>せかい</rt></ruby></button>
     </div>
 
     <div id="tab-length" class="tab-content active">
@@ -218,39 +218,39 @@
                 </div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_cm_res" readonly> <span class="unit">cm</span>
-                    <button class="copy-btn" onclick="copyValue('jp_cm_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_cm_res" readonly=""> <span class="unit">cm</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_cm_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             
             <div class="label">Distance / <ruby>距離<rt>きょり</rt></ruby> (mile → km)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_mi" oninput="calc('mi_to_km')"> <span class="unit">mi</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_mi" oninput="calc(&#39;mi_to_km&#39;)"> <span class="unit">mi</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_km_res_mi" readonly> <span class="unit">km</span>
-                    <button class="copy-btn" onclick="copyValue('jp_km_res_mi')" title="コピー">📋</button>
+                    <input type="text" id="jp_km_res_mi" readonly=""> <span class="unit">km</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_km_res_mi&#39;)" title="コピー">📋</button>
                 </div>
             </div>
 
             <div class="label">Speed / <ruby>速度<rt>そくど</rt></ruby> (mph → km/h)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_mph" oninput="calc('mph_to_kmh')"> <span class="unit">mph</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_mph" oninput="calc(&#39;mph_to_kmh&#39;)"> <span class="unit">mph</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_kmh_res" readonly> <span class="unit">km/h</span>
-                    <button class="copy-btn" onclick="copyValue('jp_kmh_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_kmh_res" readonly=""> <span class="unit">km/h</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_kmh_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
 
-            <div class="label">Area / <ruby>面積<rt>めんせき</rt></ruby> (sq ft → ㎡ & <ruby>畳<rt>じょう</rt></ruby>)</div>
+            <div class="label">Area / <ruby>面積<rt>めんせき</rt></ruby> (sq ft → ㎡ &amp; <ruby>畳<rt>じょう</rt></ruby>)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_sqft" oninput="calc('sqft_to_m2')"> <span class="unit" style="width:30px;">sqft</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_sqft" oninput="calc(&#39;sqft_to_m2&#39;)"> <span class="unit" style="width:30px;">sqft</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_m2_res" class="short-input" readonly> <span class="unit">㎡</span><span style="color:#c4d6cb; margin: 0 2px;">/</span>
-                    <input type="text" id="jp_jo_res" class="short-input" readonly> <span class="unit"><ruby>畳<rt>じょう</rt></ruby></span>
-                    <button class="copy-btn" onclick="copyArea('jp_m2_res', 'jp_jo_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_m2_res" class="short-input" readonly=""> <span class="unit">㎡</span><span style="color:#c4d6cb; margin: 0 2px;">/</span>
+                    <input type="text" id="jp_jo_res" class="short-input" readonly=""> <span class="unit"><ruby>畳<rt>じょう</rt></ruby></span>
+                    <button class="copy-btn" onclick="copyArea(&#39;jp_m2_res&#39;, &#39;jp_jo_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
         </div>
@@ -262,43 +262,43 @@
                 <div class="input-group"><input type="text" inputmode="decimal" id="jp_cm" oninput="jpToUsHeight()"> <span class="unit">cm</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_ft_res" class="short-input" readonly> <span class="unit">ft</span>
-                    <input type="text" id="us_in_res" class="short-input" readonly> <span class="unit">in</span>
-                    <button class="copy-btn" onclick="copyHeightUS('us_ft_res', 'us_in_res')" title="コピー">📋</button>
+                    <input type="text" id="us_ft_res" class="short-input" readonly=""> <span class="unit">ft</span>
+                    <input type="text" id="us_in_res" class="short-input" readonly=""> <span class="unit">in</span>
+                    <button class="copy-btn" onclick="copyHeightUS(&#39;us_ft_res&#39;, &#39;us_in_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             
             <div class="label">Distance / <ruby>距離<rt>きょり</rt></ruby> (km → mile)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="jp_km" oninput="calc('km_to_mi')"> <span class="unit">km</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_km" oninput="calc(&#39;km_to_mi&#39;)"> <span class="unit">km</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_mi_res" readonly> <span class="unit">mi</span>
-                    <button class="copy-btn" onclick="copyValue('us_mi_res')" title="コピー">📋</button>
+                    <input type="text" id="us_mi_res" readonly=""> <span class="unit">mi</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_mi_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
 
             <div class="label">Speed / <ruby>速度<rt>そくど</rt></ruby> (km/h → mph)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="jp_kmh" oninput="calc('kmh_to_mph')"> <span class="unit">km/h</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_kmh" oninput="calc(&#39;kmh_to_mph&#39;)"> <span class="unit">km/h</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_mph_res" readonly> <span class="unit">mph</span>
-                    <button class="copy-btn" onclick="copyValue('us_mph_res')" title="コピー">📋</button>
+                    <input type="text" id="us_mph_res" readonly=""> <span class="unit">mph</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_mph_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
 
-            <div class="label">Area / <ruby>面積<rt>めんせき</rt></ruby> (㎡ & <ruby>畳<rt>じょう</rt></ruby> → sq ft)</div>
+            <div class="label">Area / <ruby>面積<rt>めんせき</rt></ruby> (㎡ &amp; <ruby>畳<rt>じょう</rt></ruby> → sq ft)</div>
             <div class="row">
                 <div class="input-group">
-                    <input type="text" inputmode="decimal" id="jp_m2" class="short-input" oninput="calcAreaJP('m2')"> <span class="unit">㎡</span>
+                    <input type="text" inputmode="decimal" id="jp_m2" class="short-input" oninput="calcAreaJP(&#39;m2&#39;)"> <span class="unit">㎡</span>
                     <span style="color:#c4d6cb; margin: 0 2px;">/</span>
-                    <input type="text" inputmode="decimal" id="jp_jo" class="short-input" oninput="calcAreaJP('jo')"> <span class="unit"><ruby>畳<rt>じょう</rt></ruby></span>
+                    <input type="text" inputmode="decimal" id="jp_jo" class="short-input" oninput="calcAreaJP(&#39;jo&#39;)"> <span class="unit"><ruby>畳<rt>じょう</rt></ruby></span>
                 </div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_sqft_res" readonly> <span class="unit">sqft</span>
-                    <button class="copy-btn" onclick="copyValue('us_sqft_res')" title="コピー">📋</button>
+                    <input type="text" id="us_sqft_res" readonly=""> <span class="unit">sqft</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_sqft_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
         </div>
@@ -309,38 +309,38 @@
             <div class="col-header"><h2 class="us-title">US</h2></div>
             <div class="label">Weight / <ruby>重<rt>おも</rt></ruby>さ (lb → kg)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_lb" oninput="calc('lb_to_kg')"> <span class="unit">lb</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_lb" oninput="calc(&#39;lb_to_kg&#39;)"> <span class="unit">lb</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_kg_res" readonly> <span class="unit">kg</span>
-                    <button class="copy-btn" onclick="copyValue('jp_kg_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_kg_res" readonly=""> <span class="unit">kg</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_kg_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             <div class="label">Small Wt / <ruby>小<rt>ちい</rt></ruby>さな<ruby>重<rt>おも</rt></ruby>さ (oz → g)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_oz" oninput="calc('oz_to_g')"> <span class="unit">oz</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_oz" oninput="calc(&#39;oz_to_g&#39;)"> <span class="unit">oz</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_g_res" readonly> <span class="unit">g</span>
-                    <button class="copy-btn" onclick="copyValue('jp_g_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_g_res" readonly=""> <span class="unit">g</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_g_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             <div class="label">Volume / <ruby>容量<rt>ようりょう</rt></ruby> (fl oz → ml)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_floz" oninput="calc('floz_to_ml')"> <span class="unit">floz</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_floz" oninput="calc(&#39;floz_to_ml&#39;)"> <span class="unit">floz</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_ml_res" readonly> <span class="unit">ml</span>
-                    <button class="copy-btn" onclick="copyValue('jp_ml_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_ml_res" readonly=""> <span class="unit">ml</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_ml_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             <div class="label">Cooking / <ruby>料理<rt>りょうり</rt></ruby> (US Cup → ml)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="us_cup" oninput="calc('uscup_to_ml')"> <span class="unit">Cup</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="us_cup" oninput="calc(&#39;uscup_to_ml&#39;)"> <span class="unit">Cup</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="jp_ml_cup_res" readonly> <span class="unit">ml</span>
-                    <button class="copy-btn" onclick="copyValue('jp_ml_cup_res')" title="コピー">📋</button>
+                    <input type="text" id="jp_ml_cup_res" readonly=""> <span class="unit">ml</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;jp_ml_cup_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
         </div>
@@ -349,38 +349,38 @@
             <div class="col-header"><h2 class="jp-title">JP</h2></div>
             <div class="label">Weight / <ruby>重<rt>おも</rt></ruby>さ (kg → lb)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="jp_kg" oninput="calc('kg_to_lb')"> <span class="unit">kg</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_kg" oninput="calc(&#39;kg_to_lb&#39;)"> <span class="unit">kg</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_lb_res" readonly> <span class="unit">lb</span>
-                    <button class="copy-btn" onclick="copyValue('us_lb_res')" title="コピー">📋</button>
+                    <input type="text" id="us_lb_res" readonly=""> <span class="unit">lb</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_lb_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             <div class="label">Small Wt / <ruby>小<rt>ちい</rt></ruby>さな<ruby>重<rt>おも</rt></ruby>さ (g → oz)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="jp_g" oninput="calc('g_to_oz')"> <span class="unit">g</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_g" oninput="calc(&#39;g_to_oz&#39;)"> <span class="unit">g</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_oz_res" readonly> <span class="unit">oz</span>
-                    <button class="copy-btn" onclick="copyValue('us_oz_res')" title="コピー">📋</button>
+                    <input type="text" id="us_oz_res" readonly=""> <span class="unit">oz</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_oz_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             <div class="label">Volume / <ruby>容量<rt>ようりょう</rt></ruby> (ml → fl oz)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="jp_ml" oninput="calc('ml_to_floz')"> <span class="unit">ml</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_ml" oninput="calc(&#39;ml_to_floz&#39;)"> <span class="unit">ml</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_floz_res" readonly> <span class="unit">floz</span>
-                    <button class="copy-btn" onclick="copyValue('us_floz_res')" title="コピー">📋</button>
+                    <input type="text" id="us_floz_res" readonly=""> <span class="unit">floz</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_floz_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
             <div class="label">Cooking / <ruby>料理<rt>りょうり</rt></ruby> (ml → US Cup)</div>
             <div class="row">
-                <div class="input-group"><input type="text" inputmode="decimal" id="jp_ml_cup" oninput="calc('ml_to_uscup')"> <span class="unit">ml</span></div>
+                <div class="input-group"><input type="text" inputmode="decimal" id="jp_ml_cup" oninput="calc(&#39;ml_to_uscup&#39;)"> <span class="unit">ml</span></div>
                 <div class="arrow">→</div>
                 <div class="input-group">
-                    <input type="text" id="us_cup_res" readonly> <span class="unit">Cup</span>
-                    <button class="copy-btn" onclick="copyValue('us_cup_res')" title="コピー">📋</button>
+                    <input type="text" id="us_cup_res" readonly=""> <span class="unit">Cup</span>
+                    <button class="copy-btn" onclick="copyValue(&#39;us_cup_res&#39;)" title="コピー">📋</button>
                 </div>
             </div>
         </div>
@@ -394,10 +394,10 @@
         <div class="label label-center">Currency / <ruby>通貨<rt>つうか</rt></ruby></div>
         <div class="row row-center">
             <div class="input-group">
-                <input type="text" inputmode="decimal" id="curr_input_1" class="currency-input" oninput="calcGlobalCurrency('1_to_2')"> 
-                <select id="curr_select_1" onchange="calcGlobalCurrency('1_to_2')">
+                <input type="text" inputmode="decimal" id="curr_input_1" class="currency-input" oninput="calcGlobalCurrency(&#39;1_to_2&#39;)"> 
+                <select id="curr_select_1" onchange="calcGlobalCurrency(&#39;1_to_2&#39;)">
                     <option value="JPY">JPY (日本円・にほんえん)</option>
-                    <option value="USD" selected>USD (米ドル・べいどる)</option>
+                    <option value="USD" selected="">USD (米ドル・べいどる)</option>
                     <option value="EUR">EUR (ユーロ・ゆーろ)</option>
                     <option value="CNY">CNY (人民元・じんみんげん)</option>
                     <option value="KRW">KRW (ウォン・うぉん)</option>
@@ -405,11 +405,11 @@
                     <option value="AUD">AUD (豪ドル・ごうどる)</option>
                 </select>
             </div>
-            <button class="swap-btn" onclick="swapGlobal('curr')" title="Swap 入れ替える">⇄</button>
+            <button class="swap-btn" onclick="swapGlobal(&#39;curr&#39;)" title="Swap 入れ替える">⇄</button>
             <div class="input-group">
-                <input type="text" inputmode="decimal" id="curr_input_2" class="currency-input" oninput="calcGlobalCurrency('2_to_1')"> 
-                <select id="curr_select_2" onchange="calcGlobalCurrency('2_to_1')">
-                    <option value="JPY" selected>JPY (日本円・にほんえん)</option>
+                <input type="text" inputmode="decimal" id="curr_input_2" class="currency-input" oninput="calcGlobalCurrency(&#39;2_to_1&#39;)"> 
+                <select id="curr_select_2" onchange="calcGlobalCurrency(&#39;2_to_1&#39;)">
+                    <option value="JPY" selected="">JPY (日本円・にほんえん)</option>
                     <option value="USD">USD (米ドル・べいどる)</option>
                     <option value="EUR">EUR (ユーロ・ゆーろ)</option>
                     <option value="CNY">CNY (人民元・じんみんげん)</option>
@@ -417,53 +417,53 @@
                     <option value="GBP">GBP (ポンド・ぽんど)</option>
                     <option value="AUD">AUD (豪ドル・ごうどる)</option>
                 </select>
-                <button class="copy-btn" onclick="copyValue('curr_input_2')" title="Copy コピー">📋</button>
+                <button class="copy-btn" onclick="copyValue(&#39;curr_input_2&#39;)" title="Copy コピー">📋</button>
             </div>
         </div>
         
         <div class="label label-center">Shoes / <ruby>靴<rt>くつ</rt></ruby>の<ruby>サイズ<rt>さいず</rt></ruby></div>
         <div class="row row-center">
             <div class="input-group">
-                <input type="text" inputmode="decimal" id="shoe_input_1" oninput="calcGlobalShoe('1_to_2')"> 
-                <select id="shoe_select_1" onchange="calcGlobalShoe('1_to_2')">
-                    <option value="US_M" selected>US (メンズ・めんず・男性用・だんせいよう)</option>
+                <input type="text" inputmode="decimal" id="shoe_input_1" oninput="calcGlobalShoe(&#39;1_to_2&#39;)"> 
+                <select id="shoe_select_1" onchange="calcGlobalShoe(&#39;1_to_2&#39;)">
+                    <option value="US_M" selected="">US (メンズ・めんず・男性用・だんせいよう)</option>
                     <option value="US_W">US (レディース・れでぃーす・女性用・じょせいよう)</option>
                     <option value="UK">UK (イギリス・いぎりす)</option>
                     <option value="EU">EU (ヨーロッパ・よーろっぱ)</option>
                     <option value="JP">JP (cm・センチ・せんち)</option>
                 </select>
             </div>
-            <button class="swap-btn" onclick="swapGlobal('shoe')" title="Swap 入れ替える">⇄</button>
+            <button class="swap-btn" onclick="swapGlobal(&#39;shoe&#39;)" title="Swap 入れ替える">⇄</button>
             <div class="input-group">
-                <input type="text" inputmode="decimal" id="shoe_input_2" oninput="calcGlobalShoe('2_to_1')"> 
-                <select id="shoe_select_2" onchange="calcGlobalShoe('2_to_1')">
+                <input type="text" inputmode="decimal" id="shoe_input_2" oninput="calcGlobalShoe(&#39;2_to_1&#39;)"> 
+                <select id="shoe_select_2" onchange="calcGlobalShoe(&#39;2_to_1&#39;)">
                     <option value="US_M">US (メンズ・めんず・男性用・だんせいよう)</option>
                     <option value="US_W">US (レディース・れでぃーす・女性用・じょせいよう)</option>
                     <option value="UK">UK (イギリス・いぎりす)</option>
                     <option value="EU">EU (ヨーロッパ・よーろっぱ)</option>
-                    <option value="JP" selected>JP (cm・センチ・せんち)</option>
+                    <option value="JP" selected="">JP (cm・センチ・せんち)</option>
                 </select>
-                <button class="copy-btn" onclick="copyValue('shoe_input_2')" title="copy コピー">📋</button>
+                <button class="copy-btn" onclick="copyValue(&#39;shoe_input_2&#39;)" title="copy コピー">📋</button>
             </div>
         </div>
 
         <div class="label label-center">Temperature / <ruby>気温<rt>きおん</rt></ruby></div>
         <div class="row row-center">
             <div class="input-group">
-                <input type="text" inputmode="decimal" id="temp_input_1" oninput="calcGlobalTemp('1_to_2')"> 
-                <select id="temp_select_1" onchange="calcGlobalTemp('1_to_2')">
-                    <option value="F" selected>°F (華氏・かし)</option>
+                <input type="text" inputmode="decimal" id="temp_input_1" oninput="calcGlobalTemp(&#39;1_to_2&#39;)"> 
+                <select id="temp_select_1" onchange="calcGlobalTemp(&#39;1_to_2&#39;)">
+                    <option value="F" selected="">°F (華氏・かし)</option>
                     <option value="C">°C (摂氏・せっし)</option>
                 </select>
             </div>
-            <button class="swap-btn" onclick="swapGlobal('temp')" title="入れ替える">⇄</button>
+            <button class="swap-btn" onclick="swapGlobal(&#39;temp&#39;)" title="入れ替える">⇄</button>
             <div class="input-group">
-                <input type="text" inputmode="decimal" id="temp_input_2" oninput="calcGlobalTemp('2_to_1')"> 
-                <select id="temp_select_2" onchange="calcGlobalTemp('2_to_1')">
+                <input type="text" inputmode="decimal" id="temp_input_2" oninput="calcGlobalTemp(&#39;2_to_1&#39;)"> 
+                <select id="temp_select_2" onchange="calcGlobalTemp(&#39;2_to_1&#39;)">
                     <option value="F">°F (華氏・かし)</option>
-                    <option value="C" selected>°C (摂氏・せっし)</option>
+                    <option value="C" selected="">°C (摂氏・せっし)</option>
                 </select>
-                <button class="copy-btn" onclick="copyValue('temp_input_2')" title="コピー">📋</button>
+                <button class="copy-btn" onclick="copyValue(&#39;temp_input_2&#39;)" title="コピー">📋</button>
             </div>
         </div>
     </div>
@@ -738,5 +738,5 @@ function jpToUsHeight() {
 
 getRate();
 </script>
-</body>
-</html>
+
+</body></html>
